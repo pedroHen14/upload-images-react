@@ -16,50 +16,28 @@ interface CardsProps {
 }
 
 export function CardList({ cards }: CardsProps): JSX.Element {
-  const cardsData = [
-    {
-      id: '1617555636970000',
-      ts: 1617555636970000,
-      title: 'Doge',
-      description: 'The best doge',
-      url: 'https://github.com/pedroHen14.png',
-    },
-    {
-      id: '1617556158800000',
-      ts: 1617556158800000,
-      title: 'Danilo',
-      description: 'The best friend',
-      url: 'https://github.com/pedroHen14.png',
-    },
-  ];
+  const { onOpen, isOpen, onClose } = useDisclosure();
 
-  const [urlImage, setUrlImage] = useState('');
+  const [currentImageUrl, setCurrentImageUrl] = useState('');
 
-  const { onOpen, onClose, isOpen } = useDisclosure();
-
-  function viewImage(url: string) {
-    setUrlImage(url);
-
+  function handleViewImage(url: string): void {
     onOpen();
+    setCurrentImageUrl(url);
   }
-
-  // TODO SELECTED IMAGE URL STATE
-
-  // TODO FUNCTION HANDLE VIEW IMAGE
 
   return (
     <>
-      <SimpleGrid columns={3} spacing="40px">
-        {cardsData?.map(card => (
-          <Card
-            data={card}
-            viewImage={() => viewImage(card.url)}
-            key={card.id}
-          />
+      <SimpleGrid columns={[1, 2, 3]} spacing="40px">
+        {cards?.map(card => (
+          <Card key={card.id} data={card} viewImage={handleViewImage} />
         ))}
       </SimpleGrid>
 
-      <ModalViewImage onClose={onClose} imgUrl={urlImage} isOpen={isOpen} />
+      <ModalViewImage
+        isOpen={isOpen}
+        imgUrl={currentImageUrl}
+        onClose={onClose}
+      />
     </>
   );
 }
